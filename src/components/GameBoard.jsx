@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
-import Tile from './Tile';
+import React, { Component, Fragment } from 'react';
+import classnames from 'classnames';
+import Tiles from './Tiles';
+import GameEndCurtain from './GameEndCurtain';
 import styles from './GameBoard.scss';
 
 const ARROW_DOWN = 40;
@@ -17,7 +19,7 @@ class GameBoard extends Component {
       const index = i;
       const value = index + 1;
       tiles[i] = {
-        key: value.toString(),
+        key: value,
         value: value.toString(),
         slot: i,
       };
@@ -32,10 +34,15 @@ class GameBoard extends Component {
     return {
       tiles,
       empty: tiles[15],
+      isFinished: false,
     };
   };
 
   state = GameBoard.getInitialState();
+
+  componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyChange, false);
+  }
 
   switch = slot => {
     this.setState(prevState => {
@@ -48,10 +55,41 @@ class GameBoard extends Component {
 
       return {
         tiles: newTiles,
-        empty: { ...emptyTile },
+        empty: emptyTile,
+        isFinished: this.testGameEnd(newTiles),
       };
     });
   };
+
+  shuffle = () => {
+    const { tiles } = this.state;
+
+    let counter = tiles.length;
+    const newTiles = [...tiles];
+
+    while (counter > 0) {
+      let index = Math.floor(Math.random() * counter);
+      counter -= 1;
+
+      let leftT = newTiles[counter];
+      let rightT = newTiles[index];
+      let temp = leftT.slot;
+      newTiles[counter] = Object.assign({}, leftT, { slot: rightT.slot });
+      newTiles[index] = Object.assign({}, rightT, { slot: temp });
+    }
+
+    const emptyTile = { ...newTiles.find(tile => tile.value === '') };
+    this.setState({
+      tiles: newTiles,
+      isFinished: this.testGameEnd(newTiles),
+      empty: emptyTile,
+    });
+  };
+
+  testGameEnd(tiles) {
+    const gameEnd = false;
+    return !tiles.some(tile => tile.key - 1 !== tile.slot);
+  }
 
   moveUp = () => {
     const { empty } = this.state;
@@ -85,12 +123,12 @@ class GameBoard extends Component {
     this.switch(slotToSwitch);
   };
 
-  componentDidMount() {
-    document.addEventListener('keyup', this.handleKeyChange.bind(this), false);
-  }
-
-  handleKeyChange(event) {
+  handleKeyChange = event => {
     event.preventDefault();
+    const { isFinished } = this.state;
+    if (isFinished) {
+      return;
+    }
 
     switch (event.keyCode) {
       case ARROW_DOWN: {
@@ -112,18 +150,24 @@ class GameBoard extends Component {
       default:
         break;
     }
-  }
+  };
 
   render() {
-    const { tiles } = this.state;
+    const { tiles, isFinished } = this.state;
 
     return (
-      <div className={styles.board}>
-        {tiles
-          .sort((l, r) => l.slot - r.slot)
-          .map(item => (
-            <Tile key={item.key} value={item.value} />
-          ))}
+      <div className={styles.centered}>
+        <div className={styles.game}>
+          <div className={styles.board}>
+            <Tiles tiles={tiles} />
+            <GameEndCurtain isFinished={isFinished} />
+          </div>
+          <div className={styles.controls}>
+            <button className={styles.shuffleBtn} onClick={this.shuffle}>
+              Shuffle
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

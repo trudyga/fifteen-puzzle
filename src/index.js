@@ -5,4 +5,4 @@ import App from './App';
 import '../favicon.ico';
 import './styles.css';
 
-render(<App/>, document.getElementById('index'));
+render(<App />, document.getElementById('index'));

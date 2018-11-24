@@ -1,10 +1,73 @@
-.board {
-  width: 300px;
-  height: 300px;
-  margin: 0 auto;
+$mobileBreakpoint: 500px;
 
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.game {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   flex-direction: row;
-  background-color: orange;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (max-width: $mobileBreakpoint) {
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+}
+
+.board {
+  position: relative;
+
+  width: 50vw;
+  height: 50vw;
+  max-height: 500px;
+  max-width: 500px;
+  min-height: 150px;
+  min-width: 150px;
+
+  @media screen and (max-height: 50vw) {
+    width: 50vh;
+    height: 50vh;
+  }
+}
+
+.controls {
+  width: 70px;
+  align-self: flex-start;
+
+  @media screen and (max-width: $mobileBreakpoint) {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  @media screen and (min-width: $mobileBreakpoint) {
+    position: absolute;
+    margin-left: 10px;
+    right: -80px;
+    top: 0;
+  }
+}
+
+.shuffleBtn {
+  border-style: none;
+  border-radius: 5px;
+  background: blue;
+  border: none;
+  color: white;
+  padding: 10px;
+  width: 100%;
+
+  &:hover {
+    box-shadow: 3px 3px 6px gray;
+  }
+
+  &:active {
+    border-style: none;
+    box-shadow: 3px 3px 0 gray;
+  }
 }
