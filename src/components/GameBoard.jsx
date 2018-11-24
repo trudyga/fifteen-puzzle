@@ -34,6 +34,7 @@ class GameBoard extends Component {
     return {
       tiles,
       empty: tiles[15],
+      isFrozen: true,
       isFinished: false,
     };
   };
@@ -54,7 +55,7 @@ class GameBoard extends Component {
       tileToMove.slot = tmp;
 
       return {
-        tiles: newTiles,
+        tiles: newTiles.sort((l, r) => l.slot - r.slot),
         empty: emptyTile,
         isFinished: this.testGameEnd(newTiles),
       };
@@ -80,9 +81,10 @@ class GameBoard extends Component {
 
     const emptyTile = { ...newTiles.find(tile => tile.value === '') };
     this.setState({
-      tiles: newTiles,
+      tiles: newTiles.sort((l, r) => l.slot - r.slot),
       isFinished: this.testGameEnd(newTiles),
       empty: emptyTile,
+      isFrozen: false
     });
   };
 
@@ -125,8 +127,8 @@ class GameBoard extends Component {
 
   handleKeyChange = event => {
     event.preventDefault();
-    const { isFinished } = this.state;
-    if (isFinished) {
+    const { isFinished, isFrozen } = this.state;
+    if (isFinished || isFrozen) {
       return;
     }
 

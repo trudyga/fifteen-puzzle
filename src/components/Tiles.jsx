@@ -5,11 +5,9 @@ import styles from './Tiles.scss';
 
 const Tiles = ({ tiles }) => (
   <div className={styles.tiles}>
-    {tiles
-      .sort((l, r) => l.slot - r.slot)
-      .map(item => (
-        <Tile key={item.key} value={item.value} />
-      ))}
+    {tiles.map(item => (
+      <Tile key={item.key} value={item.value} />
+    ))}
   </div>
 );
 Tiles.propTypes = {
