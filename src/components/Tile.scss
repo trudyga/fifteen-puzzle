@@ -1,0 +1,14 @@
+.tile {
+  display: flex;
+  width: 25%;
+  outline: 1px solid gray;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: orange;
+  font-size: 1.2em;
+
+  &.empty {
+    background: orange;
+  }
+}
