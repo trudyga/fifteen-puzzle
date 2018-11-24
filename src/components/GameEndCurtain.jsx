@@ -10,7 +10,7 @@ const GameEndCurtain = ({ isFinished }) => {
 
   return (
     <div className={curtainClass}>
-      {isFinished && <span className={styles.info}>You won!</span>}
+      {isFinished && <span className={styles.info}>You win!</span>}
     </div>
   );
 };
