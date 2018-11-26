@@ -6,7 +6,7 @@ import styles from './Tiles.scss';
 const Tiles = ({ tiles }) => (
   <div className={styles.tiles}>
     {tiles.map(item => (
-      <Tile key={item.key} value={item.value} />
+      <Tile key={item.key} value={item.value} slot={item.slot} />
     ))}
   </div>
 );
